@@ -34,7 +34,7 @@ public class FailSafeRentalsDbContext : DbContext
             .Property<DateTime>("CreatedAt")
             .HasDefaultValueSql("GETUTCDATE()");
 
-        // 4. Skydda uthyrningshistorik mot oavsiktlig radering
+        // 4. Skydda uthyrningshistorik mot oavsiktlig radering 
         modelBuilder.Entity<Rental>()
             .HasOne(r => r.Customer)
             .WithMany(c => c.Rentals)
