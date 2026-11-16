@@ -16,7 +16,7 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261116091050_AddedFleetManagement";
+    public override string LastMigrationId => "20261116095000_AddDamageReportShadowProperty";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -78,13 +78,19 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
 
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
 
+                b.Property<DateTime>("AuditLoggedAt")
+                    .ValueGeneratedOnAdd()
+                    .HasColumnType("datetime2")
+                    .HasDefaultValueSql("GETUTCDATE()");
+
                 b.Property<string>("Description")
                     .IsRequired()
                     .HasMaxLength(1000)
                     .HasColumnType("nvarchar(1000)");
 
                 b.Property<decimal>("EstimatedCost")
-                    .HasColumnType("decimal(18,2)");
+                    .HasPrecision(10, 2)
+                    .HasColumnType("decimal(10,2)");
 
                 b.Property<int>("FleetVehicleId")
                     .HasColumnType("int");
@@ -157,6 +163,9 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
 
                 b.HasKey("Id");
 
+                b.HasIndex("RegistrationNumber")
+                    .IsUnique();
+
                 b.HasIndex("RentalStationId");
 
                 b.ToTable("FleetVehicles");
@@ -223,6 +232,9 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("nvarchar(250)");
 
                 b.HasKey("Id");
+
+                b.HasIndex("StationCode")
+                    .IsUnique();
 
                 b.ToTable("RentalStations");
             });

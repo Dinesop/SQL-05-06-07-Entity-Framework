@@ -43,5 +43,23 @@ public class FailSafeRentalsDbContext : DbContext
             .HasOne(r => r.Customer)
             .WithMany(c => c.Rentals)
             .OnDelete(DeleteBehavior.Restrict);
+
+        // Uppgift 7: Unika index & decimalprecision (10,2)
+        modelBuilder.Entity<RentalStation>()
+            .HasIndex(s => s.StationCode)
+            .IsUnique();
+
+        modelBuilder.Entity<FleetVehicle>()
+            .HasIndex(v => v.RegistrationNumber)
+            .IsUnique();
+
+        modelBuilder.Entity<DamageReport>()
+            .Property(d => d.EstimatedCost)
+            .HasPrecision(10, 2);
+
+        // Uppgift 8: Shadow Properties
+        modelBuilder.Entity<DamageReport>()
+            .Property<DateTime>("AuditLoggedAt")
+            .HasDefaultValueSql("GETUTCDATE()");
     }
 }
