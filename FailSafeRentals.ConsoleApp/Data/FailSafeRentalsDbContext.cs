@@ -10,6 +10,10 @@ public class FailSafeRentalsDbContext : DbContext
     public DbSet<Vehicle> Vehicles { get; set; } = null!;
     public DbSet<Rental> Rentals { get; set; } = null!;
     public DbSet<ExtraFeature> ExtraFeatures { get; set; } = null!;
+    public DbSet<RentalStation> RentalStations { get; set; }
+    public DbSet<FleetVehicle> FleetVehicles { get; set; }
+    public DbSet<DamageReport> DamageReports { get; set; }
+
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

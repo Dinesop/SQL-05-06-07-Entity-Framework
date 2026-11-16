@@ -14,6 +14,8 @@ namespace FailSafeRentals.ConsoleApp.Models
 
         [Required, MaxLength(100)]
         public string MakeAndModel { get; set; } = null!;
+
+        [Required]
         public int MileageKm{ get; set; }
         public bool NeedsService { get; set; } = false;
 
