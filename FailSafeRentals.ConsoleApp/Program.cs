@@ -49,5 +49,5 @@ Console.WriteLine($"Verifierat: {rental.Customer.FullName} hyr {rental.Vehicle.B
 if (Debugger.IsAttached)
 {
     Console.Write("\n\nTryck på en tangent för att stänga fönstret...");
-    Console.ReadKey();
+    Console.ReadKey();  
 }
