@@ -90,7 +90,5 @@ public class FailSafeRentalsDbContext : DbContext
             //    .HasData(
             //        new RentalStation { Id = 4, StationCode = "OSL-01", City = "Oslo", StreetAddress = "Gardermoen 1" }
             //    );
-
-
     }
 }
