@@ -27,5 +27,8 @@ namespace FailSafeRentals.ConsoleApp.Models
         // Lägg till DamageReports Explicit
         public int DamageReportId { get; set; }
         public List<DamageReport> DamageReports { get; set; } = null!;
+
+        // Ett fordon kan ha många underhållstaggar
+        public List<MaintenanceTag> MaintenanceTags { get; set; } = [];
     }
 }

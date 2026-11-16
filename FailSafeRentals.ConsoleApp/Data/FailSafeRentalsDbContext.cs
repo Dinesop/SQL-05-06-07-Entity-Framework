@@ -13,6 +13,7 @@ public class FailSafeRentalsDbContext : DbContext
     public DbSet<RentalStation> RentalStations { get; set; }
     public DbSet<FleetVehicle> FleetVehicles { get; set; }
     public DbSet<DamageReport> DamageReports { get; set; }
+    public DbSet<MaintenanceTag> MaintenanceTags { get; set; }
 
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
