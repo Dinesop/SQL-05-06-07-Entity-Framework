@@ -16,7 +16,7 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261116103852_AddMainenenceTagManyToMany";
+    public override string LastMigrationId => "20261116105211_PopulateRentalStations";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -258,6 +258,29 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
                     .IsUnique();
 
                 b.ToTable("RentalStations");
+
+                b.HasData(
+                    new
+                    {
+                        Id = 1,
+                        City = "Göteborg",
+                        StationCode = "GOT-01",
+                        StreetAddress = "Landvetter Flygplats"
+                    },
+                    new
+                    {
+                        Id = 2,
+                        City = "Stockholm",
+                        StationCode = "STO-01",
+                        StreetAddress = "Arlanda Flygplats"
+                    },
+                    new
+                    {
+                        Id = 3,
+                        City = "Malmö",
+                        StationCode = "MMX-01",
+                        StreetAddress = "Sturups Flygplats"
+                    });
             });
 
         modelBuilder.Entity("FailSafeRentals.ConsoleApp.Models.Vehicle", b =>

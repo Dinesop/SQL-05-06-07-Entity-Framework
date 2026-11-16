@@ -76,5 +76,12 @@ public class FailSafeRentalsDbContext : DbContext
             .HasForeignKey(d => d.FleetVehicleId)
             .OnDelete(DeleteBehavior.Restrict);
 
+        modelBuilder.Entity<RentalStation>()
+            .HasData(
+                new RentalStation { Id = 1, StationCode = "GOT-01", City = "Göteborg", StreetAddress = "Landvetter Flygplats" },
+                new RentalStation { Id = 2, StationCode = "STO-01", City = "Stockholm", StreetAddress = "Arlanda Flygplats" },
+                new RentalStation { Id = 3, StationCode = "MMX-01", City = "Malmö", StreetAddress = "Sturups Flygplats" }
+
+            );
     }
 }
