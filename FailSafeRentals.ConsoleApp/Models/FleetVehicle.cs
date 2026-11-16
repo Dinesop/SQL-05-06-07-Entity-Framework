@@ -23,5 +23,9 @@ namespace FailSafeRentals.ConsoleApp.Models
         // Explicit främmande nyckel konvention public int \<Tabellnamn>Id { get; set; }
         public int RentalStationId { get; set; }
         public RentalStation RentalStation{ get; set; }
+
+        // Lägg till DamageReports Explicit
+        public int DamageReportId { get; set; }
+        public List<DamageReport> DamageReports { get; set; } = null!;
     }
 }

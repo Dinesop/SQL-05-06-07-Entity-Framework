@@ -61,5 +61,19 @@ public class FailSafeRentalsDbContext : DbContext
         modelBuilder.Entity<DamageReport>()
             .Property<DateTime>("AuditLoggedAt")
             .HasDefaultValueSql("GETUTCDATE()");
+
+        // Uppgift 9: Kaskad delete
+        modelBuilder.Entity<FleetVehicle>()
+            .HasOne(v => v.RentalStation) // En fleet vehicle pekar på en rental station
+            .WithMany(s => s.Vehicles) // En station pekar på flera Vehicles
+            .HasForeignKey(v => v.RentalStationId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        modelBuilder.Entity<DamageReport>()
+            .HasOne(d => d.FleetVehicle) // En fleet vehicle pekar på en rental station
+            .WithMany(v => v.DamageReports) // En station pekar på flera Vehicles
+            .HasForeignKey(d => d.FleetVehicleId)
+            .OnDelete(DeleteBehavior.Restrict);
+
     }
 }

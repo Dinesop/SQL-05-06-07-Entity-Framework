@@ -16,7 +16,7 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
     // If you encounter a merge conflict in the line below, it means you need to
     // discard one of the migration branches and recreate its migrations on top of
     // the other branch. See https://aka.ms/efcore-docs-migrations-conflicts for more info.
-    public override string LastMigrationId => "20261116095000_AddDamageReportShadowProperty";
+    public override string LastMigrationId => "20261116101314_RestrictDeleteOnFleet";
 
     protected override void BuildModel(ModelBuilder modelBuilder)
     {
@@ -141,6 +141,9 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
                     .HasColumnType("int");
 
                 SqlServerPropertyBuilderExtensions.UseIdentityColumn(id);
+
+                b.Property<int>("DamageReportId")
+                    .HasColumnType("int");
 
                 b.Property<string>("MakeAndModel")
                     .IsRequired()
@@ -295,9 +298,9 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
         modelBuilder.Entity("FailSafeRentals.ConsoleApp.Models.DamageReport", b =>
             {
                 b.HasOne("FailSafeRentals.ConsoleApp.Models.FleetVehicle", "FleetVehicle")
-                    .WithMany()
+                    .WithMany("DamageReports")
                     .HasForeignKey("FleetVehicleId")
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 b.Navigation("FleetVehicle");
@@ -308,7 +311,7 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
                 b.HasOne("FailSafeRentals.ConsoleApp.Models.RentalStation", "RentalStation")
                     .WithMany("Vehicles")
                     .HasForeignKey("RentalStationId")
-                    .OnDelete(DeleteBehavior.Cascade)
+                    .OnDelete(DeleteBehavior.Restrict)
                     .IsRequired();
 
                 b.Navigation("RentalStation");
@@ -336,6 +339,11 @@ partial class FailSafeRentalsDbContextModelSnapshot : ModelSnapshot
         modelBuilder.Entity("FailSafeRentals.ConsoleApp.Models.Customer", b =>
             {
                 b.Navigation("Rentals");
+            });
+
+        modelBuilder.Entity("FailSafeRentals.ConsoleApp.Models.FleetVehicle", b =>
+            {
+                b.Navigation("DamageReports");
             });
 
         modelBuilder.Entity("FailSafeRentals.ConsoleApp.Models.RentalStation", b =>
