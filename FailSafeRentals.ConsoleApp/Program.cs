@@ -49,8 +49,8 @@ using var _db = new FailSafeRentalsDbContext();
 #region
 //SkapaCustomer();
 //SkapaFleraFordon();
-//HämtaAllaTillgängligaFordon();
-// HämtaEttSpecifiktFordon();
+HämtaAllaTillgängligaFordon();
+HämtaEttSpecifiktFordon();
 //UppdateraVehicle();
 //TaBortVehicle();
 //LäggTillUthyrningar();
@@ -64,8 +64,6 @@ using var _db = new FailSafeRentalsDbContext();
 //    Console.ReadKey();
 //}
 #endregion
-
-
 
 
 
@@ -143,14 +141,28 @@ void HämtaEttSpecifiktFordon()
     {
         Console.WriteLine($"Hittade {vehicle.Brand} {vehicle.Model} {vehicle.RegistrationNumber}");
     }
+    
+    // Uppgift 3
+    var carById = _db.Vehicles.Find(1); // find vill ha en parameter som är primärnyckeln. Kolla loggen, vi går inte in i databasen om Id = 1 redan laddades in i tidigare uppgift.
+    
+    Console.WriteLine();
+    Console.WriteLine($"Hittade {carById?.Brand} {carById?.Model} | {carById?.RegistrationNumber}");
+
+    var carByReg = _db.Vehicles
+        .FirstOrDefault(v => v.RegistrationNumber == "ABC123");
+    
+    Console.WriteLine();
+    Console.WriteLine($"Hittade {carById?.Brand} {carById?.Model} | {carById?.RegistrationNumber}");
 }
 void UppdateraVehicle()
 {
     using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
 
-    // UPDATE: Hämta, ändra egenskap, spara
-    var vehicleToUpdate = _db.Vehicles.Find(1);
-    if (vehicleToUpdate is not null) { vehicleToUpdate.DailyRate = 750m; _db.SaveChanges(); Console.WriteLine($"{vehicleToUpdate.Brand} {vehicleToUpdate.Model} has rate updated to {vehicleToUpdate.DailyRate}:-/h"); }
+    //// UPDATE: Hämta, ändra egenskap, spara
+    //var vehicleToUpdate = _db.Vehicles.Find(1);
+    //if (vehicleToUpdate is not null) { vehicleToUpdate.DailyRate = 750m; _db.SaveChanges(); Console.WriteLine($"{vehicleToUpdate.Brand} {vehicleToUpdate.Model} has rate updated to {vehicleToUpdate.DailyRate}:-/h"); }
+
+    // Uppgift 4
 }
 void TaBortVehicle()
 {

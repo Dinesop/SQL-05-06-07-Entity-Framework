@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using FailSafeRentals.Core.Models;
+using Microsoft.Extensions.Logging;
 
 namespace FailSafeRentals.Data;
 
@@ -25,11 +26,18 @@ public class FailSafeRentalsDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer
+        if (!optionsBuilder.IsConfigured)
+        {
+            optionsBuilder.UseSqlServer
             (
             @"Server=(localdb)\MSSQLLocalDB;Database=FailSafeRentals;Trusted_Connection=True;TrustServerCertificate=True;")
-            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, Microsoft.Extensions.Logging.LogLevel.Information)
+            .LogTo(Console.WriteLine, new[] 
+            { 
+                DbLoggerCategory.Database.Command.Name 
+            }, LogLevel.Information)
             .EnableSensitiveDataLogging(); // OBS mycket dåligt att ha med, visar parametervärden
+        }
+        
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
