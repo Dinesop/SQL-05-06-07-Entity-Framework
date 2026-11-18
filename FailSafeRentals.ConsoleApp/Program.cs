@@ -5,6 +5,7 @@ using System.Diagnostics;
 
 using var _db = new FailSafeRentalsDbContext();
 
+#region 
 //if (!_db.Vehicles.Any())
 //{
 //    var gps = _db.ExtraFeatures.FirstOrDefault(f => f.Name == "GPS Navigation")
@@ -43,7 +44,9 @@ using var _db = new FailSafeRentalsDbContext();
 //    .First();
 
 //Console.WriteLine($"Verifierat: {rental.Customer.FullName} hyr {rental.Vehicle.Brand} ({rental.Vehicle.RegistrationNumber})");
+#endregion
 
+#region
 //SkapaCustomer();
 //SkapaFleraFordon();
 //HämtaAllaTillgängligaFordon();
@@ -52,6 +55,7 @@ using var _db = new FailSafeRentalsDbContext();
 //TaBortVehicle();
 //LäggTillUthyrningar();
 //HämtaUthyrningar();
+#endregion
 
 #region
 //if (Debugger.IsAttached)
@@ -61,23 +65,16 @@ using var _db = new FailSafeRentalsDbContext();
 //}
 #endregion
 
-// Uppgift 1
-var customer = new Customer
-{
-    FullName = "Maja Lindberg",
-    Email = "maja.lindberg@failsafe.se",
-    DriverLicenseNumber = "SE-123456789"
-};
 
-_db.Customers.Add(customer);
-_db.SaveChanges(); // Flyttar infon från EF Core till SQL Server
-Console.WriteLine($"[Info] Kund sparad med Id: {customer.Id}");
+
+
 
 
 void SkapaCustomer()
 {
     using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
 
+    // Video 6
     var newCustomer = new Customer
     {
         FullName = "Astrid Lindholm",
@@ -87,6 +84,18 @@ void SkapaCustomer()
     _db.Customers.Add(newCustomer);
     _db.SaveChanges(); // sparar till databasen.
     Console.WriteLine($"[Info] Kund sparad med Id: {newCustomer.Id}");
+
+    // Uppgift 1
+    var customer = new Customer
+    {
+        FullName = "Maja Lindberg",
+        Email = "maja.lindberg@failsafe.se",
+        DriverLicenseNumber = "SE-123456789"
+    };
+
+    _db.Customers.Add(customer);
+    _db.SaveChanges(); // Flyttar infon från EF Core till SQL Server
+    Console.WriteLine($"[Info] Kund sparad med Id: {customer.Id}");
 }
 void SkapaFleraFordon()
 {
@@ -112,6 +121,17 @@ void HämtaAllaTillgängligaFordon()
     foreach (var vehicle in availableVehicles)
     {
         Console.WriteLine($"{vehicle.Brand} {vehicle.Model} {vehicle.DailyRate} {vehicle.IsAvailable}");
+    }
+
+    // Uppgift 2
+    var availableVehicles2 = _db.Vehicles
+    .Where(v => v.IsAvailable)
+    .OrderByDescending(v => v.DailyRate)
+    .ToList();
+
+    foreach (var v in availableVehicles2)
+    {
+        Console.WriteLine($"{v.Brand} {v.Model} {v.RegistrationNumber} is available | Cost: {v.DailyRate:C}/day");
     }
 }
 void HämtaEttSpecifiktFordon()
