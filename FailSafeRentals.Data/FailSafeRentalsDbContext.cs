@@ -30,12 +30,12 @@ public class FailSafeRentalsDbContext : DbContext
         {
             optionsBuilder.UseSqlServer
             (
-            @"Server=(localdb)\MSSQLLocalDB;Database=FailSafeRentals;Trusted_Connection=True;TrustServerCertificate=True;")
-            .LogTo(Console.WriteLine, new[] 
-            { 
-                DbLoggerCategory.Database.Command.Name 
-            }, LogLevel.Information)
-            .EnableSensitiveDataLogging(); // OBS mycket dåligt att ha med, visar parametervärden
+            @"Server=(localdb)\MSSQLLocalDB;Database=FailSafeRentals;Trusted_Connection=True;TrustServerCertificate=True;");
+            //.LogTo(Console.WriteLine, new[] 
+            //{ 
+            //    DbLoggerCategory.Database.Command.Name 
+            //}, LogLevel.Information)
+            //.EnableSensitiveDataLogging(); // OBS mycket dåligt att ha med, visar parametervärden
         }
         
     }
