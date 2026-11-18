@@ -1,8 +1,6 @@
-﻿using FailSafeRentals.ConsoleApp.Data;
-using FailSafeRentals.ConsoleApp.Models;
-
+﻿using FailSafeRentals.Core.Models;
+using FailSafeRentals.Data;
 using Microsoft.EntityFrameworkCore;
-
 using System.Diagnostics;
 
 using var _db = new FailSafeRentalsDbContext();
@@ -44,10 +42,125 @@ var rental = _db.Rentals
     .Include(r => r.Vehicle)
     .First();
 
-Console.WriteLine($"Verifierat: {rental.Customer.FullName} hyr {rental.Vehicle.Brand} ({rental.Vehicle.RegistrationNumber})");
+//Console.WriteLine($"Verifierat: {rental.Customer.FullName} hyr {rental.Vehicle.Brand} ({rental.Vehicle.RegistrationNumber})");
 
+//SkapaCustomer();
+//SkapaFleraFordon();
+//HämtaAllaTillgängligaFordon();
+// HämtaEttSpecifiktFordon();
+//UppdateraVehicle();
+//TaBortVehicle();
+//LäggTillUthyrningar();
+HämtaUthyrningar();
 if (Debugger.IsAttached)
 {
     Console.Write("\n\nTryck på en tangent för att stänga fönstret...");
-    Console.ReadKey();  
+    Console.ReadKey();
+}
+
+void SkapaCustomer()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    var newCustomer = new Customer
+    {
+        FullName = "Astrid Lindholm",
+        Email = "astrid.lindholm@failsafe.se",
+        DriverLicenseNumber = "SE-123456789"
+    };
+    _db.Customers.Add(newCustomer);
+    _db.SaveChanges(); // sparar till databasen.
+    Console.WriteLine($"[Info] Kund sparad med Id: {newCustomer.Id}");
+}
+void SkapaFleraFordon()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    var fleetBatch = new List<Vehicle>
+    {
+        new(){RegistrationNumber = "FS-001", Brand = "Volvo", Model = "V90", DailyRate = 850m, IsAvailable = true},
+        new() { RegistrationNumber = "FS-002", Brand = "Polestar", Model = "2", DailyRate = 920m, IsAvailable = true },
+        new() { RegistrationNumber = "FS-003", Brand = "Tesla", Model = "Model 3", DailyRate = 980m, IsAvailable = false },
+        new() { RegistrationNumber = "FS-004", Brand = "Volkswagen", Model = "ID.4", DailyRate = 760m, IsAvailable = true },
+        new() { RegistrationNumber = "FS-005", Brand = "Kia", Model = "EV6", DailyRate = 790m, IsAvailable = true }
+    };
+    _db.Vehicles.AddRange(fleetBatch);
+    _db.SaveChanges();
+}
+void HämtaAllaTillgängligaFordon()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    List<Vehicle> availableVehicles = _db.Vehicles
+        .Where(v => v.IsAvailable).ToList();
+    foreach (var vehicle in availableVehicles)
+    {
+        Console.WriteLine($"{vehicle.Brand} {vehicle.Model} {vehicle.DailyRate} {vehicle.IsAvailable}");
+    }
+}
+void HämtaEttSpecifiktFordon()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    Vehicle? vehicle = _db.Vehicles.Find(1); //vi anger primärnyckeln i find
+    if (vehicle is not null)
+    {
+        Console.WriteLine($"Hittade {vehicle.Brand} {vehicle.Model} {vehicle.RegistrationNumber}");
+    }
+}
+void UppdateraVehicle()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    // UPDATE: Hämta, ändra egenskap, spara
+    var vehicleToUpdate = _db.Vehicles.Find(1);
+    if (vehicleToUpdate is not null) { vehicleToUpdate.DailyRate = 750m; _db.SaveChanges(); Console.WriteLine($"{vehicleToUpdate.Brand} {vehicleToUpdate.Model} has rate updated to {vehicleToUpdate.DailyRate}:-/h"); }
+}
+void TaBortVehicle()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+    
+    // DELETE: Hämta, Markera för borttagning, Spara
+    var vehicleToUpdate = _db.Vehicles.Find(99);
+    if (vehicleToUpdate is not null) { _db.Vehicles.Remove(vehicleToUpdate); _db.SaveChanges(); Console.WriteLine("Tog bort fordon 99."); }
+    else { Console.WriteLine("Fordon 99 hittades inte."); }
+
+}
+
+void LäggTillUthyrningar()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+    
+    var uthyrningar = new List<Rental>
+    {
+            new() { CustomerId = 1, VehicleId = 2, StartDate = DateTime.UtcNow, TotalCost = 1685m },
+            new() { CustomerId = 1, VehicleId = 3, StartDate = DateTime.UtcNow, TotalCost = 2685m },
+            new() { CustomerId = 1, VehicleId = 4, StartDate = DateTime.UtcNow, TotalCost = 3685m },
+            new() { CustomerId = 1, VehicleId = 5, StartDate = DateTime.UtcNow, TotalCost = 4685m },
+            new() { CustomerId = 1, VehicleId = 6, StartDate = DateTime.UtcNow, TotalCost = 5685m },
+
+            new() { CustomerId = 2, VehicleId = 2, StartDate = DateTime.UtcNow, TotalCost = 1505m },
+            new() { CustomerId = 2, VehicleId = 3, StartDate = DateTime.UtcNow, TotalCost = 2505m },
+            new() { CustomerId = 2, VehicleId = 4, StartDate = DateTime.UtcNow, TotalCost = 3505m },
+            new() { CustomerId = 2, VehicleId = 5, StartDate = DateTime.UtcNow, TotalCost = 4505m },
+            new() { CustomerId = 2, VehicleId = 6, StartDate = DateTime.UtcNow, TotalCost = 5505m },
+
+    };
+
+    _db.Rentals.AddRange(uthyrningar);
+    _db.SaveChanges();
+}
+
+void HämtaUthyrningar()
+{
+    using var _db = new FailSafeRentalsDbContext(); // handtag till databasen
+
+    var recentHighValueRentals = _db.Rentals
+        .Where(r => r.TotalCost >= 3000m)
+        .OrderByDescending(r => r.StartDate)
+        .Take(5)
+        .ToList();
+    Console.WriteLine();
+    foreach (var r in recentHighValueRentals)
+    { Console.WriteLine($"{r.StartDate} {r.CustomerId} {r.TotalCost}"); }
 }

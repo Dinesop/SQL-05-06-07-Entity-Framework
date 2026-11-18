@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using FailSafeRentals.Core.Models;
 
-using FailSafeRentals.ConsoleApp.Models;
-
-namespace FailSafeRentals.ConsoleApp.Data;
+namespace FailSafeRentals.Data;
 
 public class FailSafeRentalsDbContext : DbContext
 {
@@ -18,8 +17,11 @@ public class FailSafeRentalsDbContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseSqlServer(
-            @"Server=(localdb)\MSSQLLocalDB;Database=FailSafeRentals;Trusted_Connection=True;TrustServerCertificate=True;");
+        optionsBuilder.UseSqlServer
+            (
+            @"Server=(localdb)\MSSQLLocalDB;Database=FailSafeRentals;Trusted_Connection=True;TrustServerCertificate=True;")
+            .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, Microsoft.Extensions.Logging.LogLevel.Information)
+            .EnableSensitiveDataLogging(); // OBS mycket dåligt att ha med, visar parametervärden
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
